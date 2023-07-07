@@ -10,14 +10,12 @@ import java.util.Optional;
 
 class WallTest {
 
-
-
     @Test
-    void shouldReturnBlockWithExistingColor () {
+    void shouldReturnBlockWithExistingColor() {
         //given
-        BlockClass blueBlock = getBlock("Blue", "BlueMaterial");
-        BlockClass redBlock = getBlock("Red", "RedMaterial");
-        CompositeBlockClass compositeBlock = new CompositeBlockClass(List.of(getBlock("Green", "GreenMaterial"),
+        CustomBlock blueBlock = getBlock("Blue", "BlueMaterial");
+        CustomBlock redBlock = getBlock("Red", "RedMaterial");
+        CustomCompositeBlock compositeBlock = new CustomCompositeBlock(List.of(getBlock("Green", "GreenMaterial"),
                 getBlock("Purple", "PurpleMaterial")));
         List<Block> blocks = List.of(blueBlock, redBlock, compositeBlock);
         Wall wall = new Wall(blocks);
@@ -33,10 +31,11 @@ class WallTest {
         Assertions.assertTrue(greenResult.isPresent());
         Assertions.assertEquals(compositeBlock.blocks().get(0), greenResult.get());
     }
+
     @Test
     void shouldReturnEmptyOptionalWhenColorNotExists() {
         //give
-        Wall wall = new Wall (Collections.emptyList());
+        Wall wall = new Wall(Collections.emptyList());
         //when
         Optional<Block> whiteResult = wall.findBlockByColor("White");
         //then
@@ -46,18 +45,18 @@ class WallTest {
     }
 
     @Test
-    void shouldReturnListOfBlocksWhenMaterialExists () {
+    void shouldReturnListOfBlocksWhenMaterialExists() {
         //given
-        BlockClass blueBlock = getBlock("Blue", "BlueMaterial");
-        BlockClass redBlock = getBlock("SecondBlue", "BlueMaterial");
-        CompositeBlockClass compositeBlock = new CompositeBlockClass(List.of(getBlock("ThirdBlue", "BlueMaterial"),
+        CustomBlock blueBlock = getBlock("Blue", "BlueMaterial");
+        CustomBlock redBlock = getBlock("SecondBlue", "BlueMaterial");
+        CustomCompositeBlock compositeBlock = new CustomCompositeBlock(List.of(getBlock("ThirdBlue", "BlueMaterial"),
                 getBlock("Purple", "PurpleMaterial")));
         List<Block> blocks = List.of(blueBlock, redBlock, compositeBlock);
         Wall wall = new Wall(blocks);
         //when
         List<Block> blueResult = wall.findBlocksByMaterial("BlueMaterial");
         //then
-        Assertions.assertEquals(3,blueResult.size());
+        Assertions.assertEquals(3, blueResult.size());
     }
 
     @Test
@@ -75,11 +74,11 @@ class WallTest {
     @Test
     void shouldReturnValidCountOfBlocks() {
         //given
-        BlockClass firstBlock = getBlock("white", "whiteMaterial");
-        BlockClass secondBlock = getBlock("blue", "blueMaterial");
-        BlockClass thirdBlock = getBlock("green", "greenMaterial");
-        CompositeBlockClass compositeBlockWithTwoBlocks = new CompositeBlockClass(List.of(getBlock("blue", "BlueMaterial"),getBlock("black", "BlackMaterial")));
-        Wall wall = new Wall(List.of(firstBlock,secondBlock,thirdBlock,compositeBlockWithTwoBlocks));
+        CustomBlock firstBlock = getBlock("white", "whiteMaterial");
+        CustomBlock secondBlock = getBlock("blue", "blueMaterial");
+        CustomBlock thirdBlock = getBlock("green", "greenMaterial");
+        CustomCompositeBlock compositeBlockWithTwoBlocks = new CustomCompositeBlock(List.of(getBlock("blue", "BlueMaterial"), getBlock("black", "BlackMaterial")));
+        Wall wall = new Wall(List.of(firstBlock, secondBlock, thirdBlock, compositeBlockWithTwoBlocks));
         //when
         int result = wall.count();
         //then
@@ -90,12 +89,12 @@ class WallTest {
     @Test
     void shouldReturnValidCountOfBlocksWhenCompositeBlocksAreEmpty() {
         //given
-        BlockClass firstBlock = getBlock("white", "whiteMaterial");
-        BlockClass secondBlock = getBlock("blue", "blueMaterial");
-        BlockClass thirdBlock = getBlock("green", "greenMaterial");
-        CompositeBlock compositeBlockWithEmptyListOfBlocks = new CompositeBlockClass(List.of());
-        CompositeBlock secondCompositeBlockWithEmptyListOfBlocks = new CompositeBlockClass(List.of());
-        Wall wall = new Wall(List.of(firstBlock,secondBlock,thirdBlock,compositeBlockWithEmptyListOfBlocks,secondCompositeBlockWithEmptyListOfBlocks));
+        CustomBlock firstBlock = getBlock("white", "whiteMaterial");
+        CustomBlock secondBlock = getBlock("blue", "blueMaterial");
+        CustomBlock thirdBlock = getBlock("green", "greenMaterial");
+        CompositeBlock compositeBlockWithEmptyListOfBlocks = new CustomCompositeBlock(List.of());
+        CompositeBlock secondCompositeBlockWithEmptyListOfBlocks = new CustomCompositeBlock(List.of());
+        Wall wall = new Wall(List.of(firstBlock, secondBlock, thirdBlock, compositeBlockWithEmptyListOfBlocks, secondCompositeBlockWithEmptyListOfBlocks));
         //when
         int result = wall.count();
         //then
@@ -103,9 +102,9 @@ class WallTest {
 
     }
 
-    private BlockClass getBlock(String color, String material) {
+    private CustomBlock getBlock(String color, String material) {
 
-        return new BlockClass(color, material);
+        return new CustomBlock(color, material);
     }
 
 }

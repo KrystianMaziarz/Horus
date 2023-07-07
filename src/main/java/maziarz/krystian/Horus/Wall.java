@@ -14,26 +14,22 @@ public class Wall implements Structure {
 
     @Override
     public Optional<Block> findBlockByColor(String color) {
-        for (Block block : blocks) {
-            Optional<Block> result = findBlockByColor(block, color);
-            if (result.isPresent()) {
-                return result;
-            }
-        }
-        return Optional.empty();
+        return blocks.stream()
+                .map(block -> findBlockByColorAndCheckIfItsComposite(block, color))
+                .filter(Optional::isPresent)
+                .findAny()
+                .orElse(Optional.empty());
     }
 
-    private Optional<Block> findBlockByColor(Block block, String color) {
+    private Optional<Block> findBlockByColorAndCheckIfItsComposite(Block block, String color) {
         if (color.equals(block.getColor())) {
             return Optional.of(block);
         }
         if (isCompositeBlock(block)) {
-            for (Block nestedBlock : ((CompositeBlock)block).blocks()) {
-                Optional<Block> result = findBlockByColor(nestedBlock, color);
-                if (result.isPresent()) {
-                    return result;
-                }
-            }
+
+            return ((CompositeBlock) block).blocks().stream()
+                    .flatMap(nestedBlock -> findBlockByColorAndCheckIfItsComposite(nestedBlock, color).stream())
+                    .findAny();
         }
         return Optional.empty();
     }
@@ -45,7 +41,11 @@ public class Wall implements Structure {
 
         blocks.forEach(block -> {
             if (isCompositeBlock(block)) {
-                ((CompositeBlock) block).blocks().stream().filter(nestedBlock -> material.equals(nestedBlock.getMaterial())).forEach(resultList::add);
+                ((CompositeBlock) block)
+                        .blocks()
+                        .stream()
+                        .filter(nestedBlock -> material.equals(nestedBlock.getMaterial()))
+                        .forEach(resultList::add);
             } else if (material.equals(block.getMaterial())) {
                 resultList.add(block);
             }
@@ -55,17 +55,12 @@ public class Wall implements Structure {
 
     }
 
-
     @Override
     public int count() {
-        int result = 0;
-        for (Block block : blocks) {
-            if (isCompositeBlock(block)){
-                result+= ((CompositeBlock)block).blocks().size()-1;
-                }
-                result++;
-            }
-        return result;
+        return blocks.stream()
+                .map(block -> isCompositeBlock(block) ? ((CompositeBlock) block).blocks().size() : 1)
+                .mapToInt(Integer::valueOf)
+                .sum();
     }
 
     private static boolean isCompositeBlock(Block block) {

@@ -1,10 +1,10 @@
 package maziarz.krystian.Horus;
 
-public final class BlockClass implements Block {
+public final class CustomBlock implements Block {
     private String color;
     private String material;
 
-    public BlockClass(String color, String material) {
+    public CustomBlock(String color, String material) {
         this.color = color;
         this.material = material;
     }
