@@ -2,10 +2,10 @@ package maziarz.krystian.Horus;
 
 import java.util.List;
 
-public final class CompositeBlockClass implements CompositeBlock {
+public final class CustomCompositeBlock implements CompositeBlock {
     private List<Block> blocks;
 
-    public CompositeBlockClass(List<Block> blocks) {
+    public CustomCompositeBlock(List<Block> blocks) {
         this.blocks = blocks;
     }
     @Override
