@@ -34,7 +34,7 @@ class WallTest {
 
     @Test
     void shouldReturnEmptyOptionalWhenColorNotExists() {
-        //give
+        //given
         Wall wall = new Wall(Collections.emptyList());
         //when
         Optional<Block> whiteResult = wall.findBlockByColor("White");

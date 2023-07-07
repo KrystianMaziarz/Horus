@@ -21,19 +21,6 @@ public class Wall implements Structure {
                 .orElse(Optional.empty());
     }
 
-    private Optional<Block> findBlockByColorAndCheckIfItsComposite(Block block, String color) {
-        if (color.equals(block.getColor())) {
-            return Optional.of(block);
-        }
-        if (isCompositeBlock(block)) {
-
-            return ((CompositeBlock) block).blocks().stream()
-                    .flatMap(nestedBlock -> findBlockByColorAndCheckIfItsComposite(nestedBlock, color).stream())
-                    .findAny();
-        }
-        return Optional.empty();
-    }
-
     @Override
     public List<Block> findBlocksByMaterial(String material) {
 
@@ -63,7 +50,20 @@ public class Wall implements Structure {
                 .sum();
     }
 
-    private static boolean isCompositeBlock(Block block) {
+    private Optional<Block> findBlockByColorAndCheckIfItsComposite(Block block, String color) {
+        if (color.equals(block.getColor())) {
+            return Optional.of(block);
+        }
+        if (isCompositeBlock(block)) {
+
+            return ((CompositeBlock) block).blocks().stream()
+                    .flatMap(nestedBlock -> findBlockByColorAndCheckIfItsComposite(nestedBlock, color).stream())
+                    .findAny();
+        }
+        return Optional.empty();
+    }
+
+    private boolean isCompositeBlock(Block block) {
         return block instanceof CompositeBlock;
     }
 
